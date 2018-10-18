@@ -1,0 +1,30 @@
+#version 430
+
+layout (local_size_x = 3) in;
+
+struct Particle
+{
+    vec3 position;
+    vec3 velocity;
+    vec3 normal;
+    vec3 tangent;
+    vec2 texture;
+};
+
+layout(binding = 1) buffer particlesBlock
+{
+    Particle particles[];
+};
+
+void main()
+{
+    uint index = gl_GlobalInvocationID.x;
+    vec3 position = particles[index].position;
+    vec3 velocity = particles[index].velocity;
+    
+    velocity += (1.0/60.0) * vec3(0, 0, -9.81);
+    position += (1.0/60.0) * velocity;
+
+    particles[index].velocity = velocity;
+    particles[index].position = position;
+}
