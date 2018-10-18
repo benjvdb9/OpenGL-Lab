@@ -67,9 +67,14 @@ Sphere::Sphere(Program *program) : Mesh(program)
 	}
 
 	indices = new GLuint[2160];
-	for(int i=0; i<2160; i++)
+	for(int i=0; i<11; i++)
 	{
-		indices[i] = i;
+		n = i*180;
+		for(int j=0; j<180; j++)
+		{
+			indices[j*n] = n;
+			indices[j*n+1] = n + 180;
+		}
 	}
 
 	GLint vpos_location, vtex_location, tex_location, vnor_location;

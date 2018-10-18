@@ -20,6 +20,5 @@ layout(binding = 1) buffer particlesBlock
 void main()
 {
     uint index = gl_GlobalInvocationID.x;
-
     particles[index].acceleration = vec3(0, 0, -0.10);
 }
