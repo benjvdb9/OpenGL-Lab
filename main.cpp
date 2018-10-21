@@ -40,7 +40,7 @@ class MyApplication : public Application
 	void update()
 	{
 		// Update rotation of the object
-		//root->setRotation(rotate((float) glfwGetTime()*20, 0.0f, 0.0f, 1.0f));
+		root->setRotation(rotate((float) glfwGetTime()*20, 0.0f, 0.0f, 1.0f));
 	}
 
 	void render()

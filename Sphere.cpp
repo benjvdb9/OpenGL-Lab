@@ -36,12 +36,12 @@ Sphere::Sphere(Program *program) : Mesh(program)
 		for(int theta=0; theta<180; theta++)
 		{
 			n = phi*180 + theta;
-			O = (theta - 90) * PI / 180;
+			O = theta * PI / 180;
 			Y = phi * PI * 30 /180;
 
-			x = (1 * cos(O) * cos(Y));
-			y = (1 * cos(O) * sin(Y));
-			z = (1 * sin(O));
+			x = (1 * sin(O) * cos(Y));
+			y = (1 * sin(O) * sin(Y));
+			z = (1 * cos(O));
 
 			vertices[n].position = vec3(x, y, z);
 		}		
@@ -51,30 +51,35 @@ Sphere::Sphere(Program *program) : Mesh(program)
 	{
 		vertices[i].velocity = vec3(0.f, 0.0f, 0.f);
 		vertices[i].acceleration = vec3(0.f, 0.0f, 0.f);
-		vertices[i].normal = vec3(0.f, 0.f, 1.f);
-		//vertices[i].texture = vec2(0.f, 0.f);
+		vertices[i].normal = vertices[i].position;
 	}
 
-	x, y = 0, 0;
-	for(int i=0; i<2160; i++)
+	float xt = 0;
+	float yt = 0;
+	for(int i=0; i<12; i++)
 	{
 		for(int j=0; j<180; j++)
 		{
-			vertices[i].texture = vec2(x, y);
-			y += 1 / 180;
+			cout << "Location: " << i << " ; " << j << endl;
+			cout << "Texture: " << xt << " ; " << yt << endl;
+			vertices[180*i+j].texture = vec2(xt, yt);
+			yt = (179*yt + 2) / 179;
 		}
-		x += 2 / 12
+		xt = (11*xt + 1) / 11;
+		yt = 0;
 	}
 
 	indices = new GLuint[2160];
-	for(int i=0; i<11; i++)
+	for(int i=0; i<1980; i=i+2)
 	{
-		n = i*180;
-		for(int j=0; j<180; j++)
-		{
-			indices[j*n] = n;
-			indices[j*n+1] = n + 180;
-		}
+		indices[i] = i;
+		indices[i+1] = i+180;
+	}
+
+	for(int i=1980; i<2160; i=i+2)
+	{
+		indices[i] = i;
+		indices[i+1] = i - 1980;
 	}
 
 	GLint vpos_location, vtex_location, tex_location, vnor_location;
@@ -145,8 +150,8 @@ void Sphere::render(mat4 model)
 	for(int i=0; i<12; i++)
 	{
 		ind = i*180*sizeof(GLuint);
-		glDrawElements(GL_LINE_STRIP, 180, GL_UNSIGNED_INT, (void*) ind);
+		glDrawElements(GL_LINE_STRIP, 180, GL_UNSIGNED_INT,(void*) ind);
 	}
-
+	
 	getProgram()->end();
 }
