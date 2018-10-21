@@ -60,12 +60,10 @@ Sphere::Sphere(Program *program) : Mesh(program)
 	{
 		for(int j=0; j<180; j++)
 		{
-			cout << "Location: " << i << " ; " << j << endl;
-			cout << "Texture: " << xt << " ; " << yt << endl;
 			vertices[180*i+j].texture = vec2(xt, yt);
-			yt = (179*yt + 2) / 179;
+			yt = (179*yt + 1) / 179;
 		}
-		xt = (11*xt + 1) / 11;
+		xt = (11*xt + 2) / 11;
 		yt = 0;
 	}
 
@@ -150,8 +148,8 @@ void Sphere::render(mat4 model)
 	for(int i=0; i<12; i++)
 	{
 		ind = i*180*sizeof(GLuint);
-		glDrawElements(GL_LINE_STRIP, 180, GL_UNSIGNED_INT,(void*) ind);
+		glDrawElements(GL_TRIANGLE_STRIP, 180, GL_UNSIGNED_INT,(void*) ind);
 	}
-	
+
 	getProgram()->end();
 }
