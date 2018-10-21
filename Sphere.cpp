@@ -27,17 +27,19 @@ Sphere::Sphere(Program *program) : Mesh(program)
 		float p6, p7;
 	};
 	
-	Vertex vertices[2160];
+	int lines = 24;
+	int vertnum = lines*180;
+	Vertex vertices[vertnum];
 
 	int n;
 	float x, y, z, O, Y;
-	for(int phi=0; phi<12; phi++)
+	for(int phi=0; phi<lines; phi++)
 	{
 		for(int theta=0; theta<180; theta++)
 		{
 			n = phi*180 + theta;
 			O = theta * PI / 180;
-			Y = phi * PI * 30 /180;
+			Y = phi * PI * (360 / lines) /180;
 
 			x = (1 * sin(O) * cos(Y));
 			y = (1 * sin(O) * sin(Y));
@@ -47,7 +49,7 @@ Sphere::Sphere(Program *program) : Mesh(program)
 		}		
 	}
 
-	for(int i=0; i<2160; i++)
+	for(int i=0; i<vertnum; i++)
 	{
 		vertices[i].velocity = vec3(0.f, 0.0f, 0.f);
 		vertices[i].acceleration = vec3(0.f, 0.0f, 0.f);
@@ -56,28 +58,29 @@ Sphere::Sphere(Program *program) : Mesh(program)
 
 	float xt = 0;
 	float yt = 0;
-	for(int i=0; i<12; i++)
+	int nt = lines - 1;
+	for(int i=0; i<lines; i++)
 	{
 		for(int j=0; j<180; j++)
 		{
 			vertices[180*i+j].texture = vec2(xt, yt);
 			yt = (179*yt + 1) / 179;
 		}
-		xt = (11*xt + 2) / 11;
+		xt = (nt*xt + 2) / nt;
 		yt = 0;
 	}
 
-	indices = new GLuint[2160];
-	for(int i=0; i<1980; i=i+2)
+	indices = new GLuint[vertnum];
+	for(int i=0; i<(vertnum-180); i=i+2)
 	{
 		indices[i] = i;
 		indices[i+1] = i+180;
 	}
 
-	for(int i=1980; i<2160; i=i+2)
+	for(int i=(vertnum-180); i<vertnum; i=i+2)
 	{
 		indices[i] = i;
-		indices[i+1] = i - 1980;
+		indices[i+1] = i - (vertnum-180);
 	}
 
 	GLint vpos_location, vtex_location, tex_location, vnor_location;
@@ -105,7 +108,7 @@ Sphere::Sphere(Program *program) : Mesh(program)
 	GLuint index_buffer;
 	glGenBuffers(1, &index_buffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * 2160, indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * vertnum, indices, GL_STATIC_DRAW);
 
 	program->bind();
 
@@ -145,7 +148,9 @@ void Sphere::render(mat4 model)
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	int ind;
-	for(int i=0; i<12; i++)
+	//change i here and indices to change the
+	//amount of vertical lines
+	for(int i=0; i<24; i++)
 	{
 		ind = i*180*sizeof(GLuint);
 		glDrawElements(GL_TRIANGLE_STRIP, 180, GL_UNSIGNED_INT,(void*) ind);
