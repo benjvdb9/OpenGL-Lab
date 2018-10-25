@@ -1,5 +1,5 @@
-#ifndef SPHERE_MESH_H
-#define SPHERE_MESH_H
+#ifndef SHEET_MESH_H
+#define SHEET_MESH_H
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -7,11 +7,11 @@
 #include "Mesh.h"
 #include "Computer.h"
 
-class Sphere : public Mesh
+class Sheet : public Mesh
 {
 	public:
-	Sphere(Program *program);
-	~Sphere();
+	Sheet(Program *program);
+	~Sheet();
 	void render(mat4 model);
 	void update();
 

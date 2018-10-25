@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Table.h"
 #include "Sphere.h"
+#include "Sheet.h"
 #include "Object.h"
 #include "Program.h"
 
@@ -14,7 +15,9 @@ class MyApplication : public Application
 {
 	private:
 	Sphere *sphere;
+	Sheet *sheet;	
 	Object *root;
+	Object *root2;
 	Program *program;
 
 	public:
@@ -33,14 +36,18 @@ class MyApplication : public Application
 		// Create a Mesh instance
 		sphere = new Sphere(program);
 
+		sheet = new Sheet(program);
+
 		// Create an Object
 		root = new Object(sphere, vec3(0, 0, 0), mat4::identity());
+		root2 = new Object(sheet, vec3(0, 0, 0), mat4::identity());
 	}
 
 	void update()
 	{
 		// Update rotation of the object
 		root->setRotation(rotate((float) glfwGetTime()*20, 0.0f, 0.0f, 1.0f));
+		sheet->update();
 	}
 
 	void render()
@@ -58,12 +65,15 @@ class MyApplication : public Application
 		setView(view);
 
 		root->render(model);
+		root2->render(model);
 	}
 
 	void teardown()
 	{
 		delete root;
+		delete root2;
 		delete sphere;
+		delete sheet;
 		delete program;
 	}
 };
