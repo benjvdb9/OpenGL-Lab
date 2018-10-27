@@ -47,7 +47,7 @@ class MyApplication : public Application
 	{
 		// Update rotation of the object
 		root->setRotation(rotate((float) glfwGetTime()*20, 0.0f, 0.0f, 1.0f));
-		sheet->update();
+		//sheet->update();
 	}
 
 	void render()

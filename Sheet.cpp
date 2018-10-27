@@ -35,7 +35,7 @@ Sheet::Sheet(Program *program) : Mesh(program)
 		{
 			x = (i - 50) / float(50);
 			y = (j - 50) / float(50);
-			vertices[i*100 + j].position = vec3(x, y, 1.1);
+			vertices[i*100 + j].position = vec3(x, y, 0);
 		}
 	}
 
@@ -87,14 +87,14 @@ Sheet::Sheet(Program *program) : Mesh(program)
 		n++;
 	}
 
-	n = 0;
+	/*n = 0;
 	for(int j=0; j<200; j=j+2)
 	{
 		indices[98*200 + j] = 98*100 + n;
 		indices[98*200 + j+1] = 98*100 + n + 100;
 		n++;
 	}
-	/*n--;
+	n--;
 	for(int j=0; j<200; j=j+2)
 	{
 		indices[99*200 + j] = 98*100 + n;
@@ -169,7 +169,7 @@ void Sheet::update()
 {
 	acceleration->compute(1, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-	cinematic->compute(1, 1, 1);
+	cinematic->compute(200, 1, 1);
 	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);	
 }
 

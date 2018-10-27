@@ -66,7 +66,15 @@ Sphere::Sphere(Program *program) : Mesh(program)
 			vertices[180*i+j].texture = vec2(xt, yt);
 			yt = (179*yt + 1) / 179;
 		}
-		xt = (nt*xt + 2) / nt;
+		if(i < lines / 2)
+		{
+			xt = (nt*xt + 1) / nt;
+		} 
+		else
+		{
+			xt = (nt*xt - 1) / nt;
+		}
+		
 		yt = 0;
 	}
 
