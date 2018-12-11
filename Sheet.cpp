@@ -87,7 +87,7 @@ Sheet::Sheet(Program *program) : Mesh(program)
 		n++;
 	}
 
-	/*n = 0;
+	n = 0;
 	for(int j=0; j<200; j=j+2)
 	{
 		indices[98*200 + j] = 98*100 + n;
@@ -100,7 +100,7 @@ Sheet::Sheet(Program *program) : Mesh(program)
 		indices[99*200 + j] = 98*100 + n;
 		indices[99*200 + j+1] = 98*100 + n + 100;
 		n--;
-	}*/
+	}
 
 	GLint vpos_location, vtex_location, tex_location, vnor_location;
 
@@ -167,10 +167,10 @@ Sheet::~Sheet()
 
 void Sheet::update()
 {
-	acceleration->compute(1, 1, 1);
+	acceleration->compute(150, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-	cinematic->compute(200, 1, 1);
-	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);	
+	cinematic->compute(150, 1, 1);
+	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 }
 
 void Sheet::render(mat4 model)
