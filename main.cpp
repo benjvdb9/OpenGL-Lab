@@ -64,7 +64,7 @@ class MyApplication : public Application
 		setProjection(projection);
 		setView(view);
 
-		//root->render(model);
+		root->render(model);
 		root2->render(model);
 	}
 

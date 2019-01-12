@@ -21,8 +21,9 @@ class Sheet : public Mesh
 	GLuint texture;
 	GLuint texUnit;
 	GLuint *indices;
-	Computer *acceleration;
+	Computer *physics;
 	Computer *cinematic;
+	Computer *acceleration;
 };
 
 #endif
