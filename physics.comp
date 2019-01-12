@@ -17,22 +17,84 @@ layout(binding = 1) buffer particlesBlock
     Particle particles[];
 };
 
+void calcHooke(uint index, vec3 dir) {
+    float k = -0.2;
+    float delta = distance(particles[index].position, dir);
+    vec3 unitvec = normalize(particles[index].position - dir);
+    vec3 force = k * delta * unitvec;
+    particles[index].acceleration = particles[index].acceleration + force; 
+}
+
 //For GLSL debugging
 //http://shdr.bkcore.com
 void main()
 {
     uint index = gl_GlobalInvocationID.x;
+    vec3 neighbours[8];
     particles[index].acceleration = vec3(0, 0, -0.1);
 
     vec3 center = vec3(0.0, 0.0, 0.0);
     float radius = 1.0;
+
+    if (index == 0 || mod(index, 50) == 0) {
+        vec3 ee = particles[index + 1].position;
+        calcHooke(index, ee);
+        if (index != 0) {
+            vec3 nn = particles[index - 50].position;
+            vec3 ne = particles[index - 49].position;
+            calcHooke(index, nn);
+            calcHooke(index, ne);
+        }
+        if (index != 2450) {
+            vec3 ss = particles[index + 50].position;
+            vec3 se = particles[index + 51].position;
+            calcHooke(index, ss);
+            calcHooke(index, se);
+        }
+    } else if (index == 49 || mod(index, 49) == 0) {
+        vec3 ww = particles[index - 1].position;
+        if (index != 49) {
+            vec3 nn = particles[index - 50].position;
+            vec3 nw = particles[index - 51].position;
+            calcHooke(index, nn);
+            calcHooke(index, nw);
+        }
+        if (index != 2449) {
+            vec3 ss = particles[index + 50].position;
+            vec3 sw = particles[index + 49].position;
+            calcHooke(index, ss);
+            calcHooke(index, sw);
+        }
+    } else {
+        vec3 ww = particles[index - 1].position;
+        vec3 ee = particles[index + 1].position;
+        calcHooke(index, ww);
+        calcHooke(index, ee);
+        if (!(index < 49)) {
+            vec3 nw = particles[index - 51].position;
+            vec3 nn = particles[index - 50].position;
+            vec3 ne = particles[index - 49].position;
+            calcHooke(index, nw);
+            calcHooke(index, nn);
+            calcHooke(index, ne);
+        }
+        if (!(index > 2450)) {
+            vec3 sw = particles[index + 49].position;
+            vec3 ss = particles[index + 50].position;
+            vec3 se = particles[index + 51].position;
+            calcHooke(index, sw);
+            calcHooke(index, ss);
+            calcHooke(index, se);
+        }
+    }
+
 
     float dist = distance(particles[index].position, center);
     if (radius > dist)
     {
         vec3 unitvec = normalize(particles[index].position - center);
         vec3 outofbounds = (dist - radius + 0.01) * unitvec;
-        particles[index].velocity = vec3(0, 0, 0.01);
+        particles[index].velocity = outofbounds;
         particles[index].position = particles[index].position + outofbounds;
     };
 }
